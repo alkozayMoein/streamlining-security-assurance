@@ -1,0 +1,34 @@
+name: SonarQube Integration
+on: push
+
+jobs:
+  sonarqube:
+    name: SonarQube Integration
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - name: Install Dependencies
+      run: npm install
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    - name: Check SonarQube Results
+      run: |
+        if [ ${{ steps.sonarqube-scan.outcome }} == 'failure' ]; then
+          echo "Security scan failed. Check SonarQube for details."
+          # Add commands to send an email notification
+          # Example using `sendmail`:
+          echo "Subject: Security Scan Failed" | sendmail eng.faridqattali@gmail.com
+          exit 1
+        else
+          echo "Security scan passed. No vulnerabilities found."
+        fi
