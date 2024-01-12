@@ -1,13 +1,11 @@
-pipeline{
-    agent any
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '5'))
-    }
+pipeline {
+    agent none
     stages {
-        stage('Scan') {
+        stage("build & SonarQube Scanner") {
+            agent any
             steps {
-                withSonarQubeEnv(installationName: 'sql'){
-                    sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
+                withSonarQubeEnv('sql') {
+                    sh 'mvn clean package sonar:sonar'
                 }
             }
         }
