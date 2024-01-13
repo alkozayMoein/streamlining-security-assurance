@@ -1,13 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Git Checkout') {
-            steps {
-                git url: 'https://github.com/alkozayMoein/streamlining-security-assurance.git'    
-		            echo "Code Checked-out Successfully!!";
-            }
-        }
-        
         stage('Package') {
             steps {
                 bat 'mvn package'    
@@ -15,20 +8,6 @@ pipeline {
             }
         }
         
-        stage('JUNit Reports') {
-            steps {
-                    junit 'target/surefire-reports/*.xml'
-		                echo "Publishing JUnit reports"
-            }
-        }
-        
-        stage('Jacoco Reports') {
-            steps {
-                  jacoco()
-                  echo "Publishing Jacoco Code Coverage Reports";
-            }
-        }
-
 	stage('SonarQube analysis') {
             steps {
 		// Change this as per your Jenkins Configuration
