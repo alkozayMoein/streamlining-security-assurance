@@ -30,6 +30,7 @@ app.get('/', (req, res) => {
   res.send('Hello, this is your Express and Mongoose project!');
 });
 
+console.log("test");
 // Create a new user
 app.get('/create-user', async (req, res) => {
   try {
